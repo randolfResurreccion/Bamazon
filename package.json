@@ -1,0 +1,23 @@
+{
+  "name": "bamazon",
+  "version": "1.0.0",
+  "description": "Amazon-like storefront with  MySQL",
+  "main": "bamazon.Manager.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/randolfResurreccion/Bamazon.git"
+  },
+  "author": "Randolf Resurreccion",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/randolfResurreccion/Bamazon/issues"
+  },
+  "homepage": "https://github.com/randolfResurreccion/Bamazon#readme",
+  "dependencies": {
+    "inquirer": "^4.0.2",
+    "mysql": "^2.15.0"
+  }
+}
