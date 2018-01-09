@@ -49,45 +49,66 @@ function start() {
     ]).then(function (answer) {
         connection.query("SELECT * FROM products WHERE item_id = ?", [answer.desiredItem], function (err, res) {
             if (err) throw err;
+            for (var i = 0; i < res.length; i++) {
+                var quantitySelected = parseInt(answer.desiredQuantity);
+                var total = answer.desiredQuantity * res[i].price;
+                if (quantitySelected > res[i].stock_quantity) {
+                    console.log("Insufficient quantity!");
+                    connection.end();
+                }
+                else {
+                    console.log("test");
+                    var stockUpdate = res[i].stock_quantity - quantitySelected;
+                    updateStocks(res[i].item_id, stockUpdate);
+                }
 
-            var quantitySelected = parseInt(answer.desiredQuantity);
-            // console.log(res[0].stock_quantity);
-            var stock_quantity = res[0].stock_quantity;
-            if (quantitySelected > stock_quantity) {
-                console.log("Insufficient quantity!");
-                connection.end();
+                function updateStocks(target_item, stockUpdate) {
+                    console.log(target_item);
+                    console.log(stockUpdate);
+                    connection.query("UPDATE products SET ?",
+                        [
+                            {
+                                stock_quantity: stockUpdate
+                            },
+                            {
+                                item_id: target_item
+                            }
+                        ], function (err, res) {
+                            if (err) throw err;
+                            console.log(target_item);
+                            console.log(stockUpdate);
+                            console.log("stock updated");
+                            connection.end();
+                            console.log("Your total is: " + total);
 
+                        });
+                }
             }
-            else {
-                console.log("word");
-                var stockUpdate = stock_quantity - quantitySelected;
-                // console.log(stockUpdate);
-                updateStocks(answer.desiredItem, stockUpdate);
-            }
+
+
+
+            // ================================================================ihgkjcxhlkudhclkZDJHbcljzbhc
+            // var quantitySelected = parseInt(answer.desiredQuantity);
+            // // console.log(res[0].stock_quantity);
+            // var stock_quantity = res[0].stock_quantity;
+            // if (quantitySelected > stock_quantity) {
+            //     console.log("Insufficient quantity!");
+            //     connection.end();
+
+            // }
+            // else {
+            //     console.log("word");
+            //     var stockUpdate = stock_quantity - quantitySelected;
+            //     // console.log(stockUpdate);
+            //     updateStocks(answer.desiredItem, stockUpdate);
+            // }
+
+
 
         });
     })
 
 };
 
-function updateStocks(target_item, stockUpdate) {
-    console.log(target_item);
-    console.log(stockUpdate);
-    connection.query("UPDATE products SET ?",
-    [
-        {
-            stock_quantity: stockUpdate
-        },
-        {
-            item_id: target_item
-        }
-    ], function (err, res) {
-        if(err) throw err;
-        console.log(target_item);
-        console.log(stockUpdate);
-        console.log("stock updated");
-        connection.end();
 
-    });
-}
 
