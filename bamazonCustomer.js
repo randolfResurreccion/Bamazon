@@ -33,58 +33,61 @@ function displayProducts() {
 };
 
 // start function===============
-var count = 0;
+
 function start() {
-    if (count === 0) {
-        count++;
-        inquirer.prompt([
-            {
-                name: "q1",
-                type: "list",
-                message: "Please enter the item id of the Item you are looking for:  ",
-                choices: ["id 1", "id 2", "id 3", "id 4", "id 5", "id 6", "id 7", "id 8", "id 9", "id 10"]
-            },
-            {
-                name: "q2",
-                type: "input",
-                message: "Enter how many of this item you want to purchase: "
+    inquirer.prompt([
+        {
+            name: "desiredItem",
+            type: "input",
+            message: "Please enter the item id of the Item you are looking for: ",
+        },
+        {
+            name: "desiredQuantity",
+            type: "input",
+            message: "Enter how many of this item you want to purchase: "
+        }
+    ]).then(function (answer) {
+        connection.query("SELECT * FROM products WHERE item_id = ?", [answer.desiredItem], function (err, res) {
+            if (err) throw err;
+
+            var quantitySelected = parseInt(answer.desiredQuantity);
+            // console.log(res[0].stock_quantity);
+            var stock_quantity = res[0].stock_quantity;
+            if (quantitySelected > stock_quantity) {
+                console.log("Insufficient quantity!");
+                connection.end();
+
             }
-        ]).then(function (answer) {
-            connection.query("SELECT * FROM products", function (err, res) {
-                if (err) throw err;
-                // console.log(res);
-                for (var i = 0; i < res.length; i++) {
-                    if (answer.q2 > res[i].stock_quantity) {
-                        console.log("Insufficient quantity!");
+            else {
+                console.log("word");
+                var stockUpdate = stock_quantity - quantitySelected;
+                // console.log(stockUpdate);
+                updateStocks(answer.desiredItem, stockUpdate);
+            }
 
-                    }
-                    else {
-                        res[i].stock_quantity -= answer.q2;
-                        connection.query("UPDATE products SET stock_quantity=" + res[i].stock_quantity + "WHERE item_id=" + res[i].item_id, function (err, res) {
-                            if (err) throw err;
-                        });
-
-                        // updateStocks(answer.q2, answer.q1);
-                    }
-                }
-            });
-        })
-    }
-    else {
-        // connection.end();
-    }
+        });
+    })
 
 };
 
-// function updateStocks() {
-//     connection.query("UPDATE products SET ? WHERE ?",
-//         [
-//             {
-//                 stock_quantity: ""
-//             },
-//             {
-//                 id: q1
-//             }
-//         ], function (err, res) { });
-// }
+function updateStocks(target_item, stockUpdate) {
+    console.log(target_item);
+    console.log(stockUpdate);
+    connection.query("UPDATE products SET ?",
+    [
+        {
+            stock_quantity: stockUpdate
+        },
+        {
+            item_id: target_item
+        }
+    ], function (err, res) {
+        if(err) throw err;
+        console.log(target_item);
+        console.log(stockUpdate);
+        console.log("stock updated");
+        connection.end();
+
+    });
+}
 
