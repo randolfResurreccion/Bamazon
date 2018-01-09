@@ -32,7 +32,7 @@ function displayProducts() {
     });
 };
 
-// start function===============
+
 
 function start() {
     inquirer.prompt([
@@ -52,20 +52,22 @@ function start() {
             for (var i = 0; i < res.length; i++) {
                 var quantitySelected = parseInt(answer.desiredQuantity);
                 var total = answer.desiredQuantity * res[i].price;
+                var product_name = res[i].product_name;
+                var stockUpdate = res[i].stock_quantity - quantitySelected;
                 if (quantitySelected > res[i].stock_quantity) {
                     console.log("Insufficient quantity!");
                     connection.end();
                 }
                 else {
-                    console.log("test");
-                    var stockUpdate = res[i].stock_quantity - quantitySelected;
+                   
+                    console.log("Item chosen: " + product_name);
                     updateStocks(answer.desiredItem, stockUpdate);
+                    console.log("There is " + stockUpdate + " " + product_name + " left");
                 }
 
                 function updateStocks(target_item, stockUpdate) {
-                    console.log(target_item);
-                    console.log(stockUpdate);
-                    connection.query("UPDATE products SET ?",
+                    
+                    connection.query("UPDATE products SET ? WHERE ?",
                         [
                             {
                                 stock_quantity: stockUpdate
@@ -75,34 +77,13 @@ function start() {
                             }
                         ], function (err, res) {
                             if (err) throw err;
-                            console.log(target_item);
-                            console.log(stockUpdate);
                             console.log("stock updated");
                             connection.end();
-                            console.log("Your total is: " + total )
+                            console.log("Your total is: $" + total)
 
                         });
                 }
             }
-
-
-
-            // ================================================================ihgkjcxhlkudhclkZDJHbcljzbhc
-            // var quantitySelected = parseInt(answer.desiredQuantity);
-            // // console.log(res[0].stock_quantity);
-            // var stock_quantity = res[0].stock_quantity;
-            // if (quantitySelected > stock_quantity) {
-            //     console.log("Insufficient quantity!");
-            //     connection.end();
-
-            // }
-            // else {
-            //     console.log("word");
-            //     var stockUpdate = stock_quantity - quantitySelected;
-            //     // console.log(stockUpdate);
-            //     updateStocks(answer.desiredItem, stockUpdate);
-            // }
-
 
 
         });
