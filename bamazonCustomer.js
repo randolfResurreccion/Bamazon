@@ -59,7 +59,7 @@ function start() {
                 else {
                     console.log("test");
                     var stockUpdate = res[i].stock_quantity - quantitySelected;
-                    updateStocks(res[i].item_id, stockUpdate);
+                    updateStocks(answer.desiredItem, stockUpdate);
                 }
 
                 function updateStocks(target_item, stockUpdate) {
@@ -79,7 +79,7 @@ function start() {
                             console.log(stockUpdate);
                             console.log("stock updated");
                             connection.end();
-                            console.log("Your total is: " + total);
+                            console.log("Your total is: " + total )
 
                         });
                 }
