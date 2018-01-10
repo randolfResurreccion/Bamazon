@@ -8,4 +8,5 @@ https://github.com/randolfResurreccion/Bamazon/blob/master/bamazon.sql
 
 *Here i created my node app that is called bamazonCustomer.
  Running this application will first display all of the items available for sale. Include the ids, names, and prices of products for sale. 
+ bamazonCustomer.js link https://github.com/randolfResurreccion/Bamazon/blob/master/bamazonCustomer.js
  
