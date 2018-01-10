@@ -11,6 +11,7 @@ https://github.com/randolfResurreccion/Bamazon/blob/master/bamazon.sql
 This app also prompts users with two messages:
 1) ask user the ID of the product they would like to buy.
 2) ask how many units of the product they would like to buy.
+
 bamazonCustomer.js link https://github.com/randolfResurreccion/Bamazon/blob/master/bamazonCustomer.js
 
  
